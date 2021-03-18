@@ -2,6 +2,7 @@
 
 
     class DbConnect {
+      
       private $conn;
 
       function connect() {
