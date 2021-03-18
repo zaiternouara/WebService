@@ -12,7 +12,7 @@ $app = new Slim\App($config);
 
 
 $app->post('/createmedicament', function(Request $request , Response $response){
-  if(!HaveEmptyParameters(array('Classe_Therapeutique', 'Nom_Commercial', 'Laboratoire', 'Denominateur_De_Medicament', 'Forme_Pharmaceutique', 'Duree_De_Conservation', 'Remborsable', 'Lot', 'Date_De_Fabrication', 'Date_Peremption', 'Description_De_Composant', 'Prix', 'Quantite_En_Stock'),$request, $response)){
+  if(!HaveEmptyParameters(array('Classe_Therapeutique', 'Nom_Commercial', 'Laboratoire', 'Denominateur_De_Medicament', 'Forme_Pharmaceutique', 'Duree_De_Conservation', 'Remborsable', 'Lot', 'Date_De_Fabrication', 'Date_Peremption', 'Description_De_Composant', 'Prix', 'Quantite_En_Stock', 'Code_a_Bare', 'Image'),$request, $response)){
 
       $request_data = $request->getParsedBody();
 
@@ -29,10 +29,13 @@ $app->post('/createmedicament', function(Request $request , Response $response){
       $Description_De_Composant=$request_data['Description_De_Composant'];
       $Prix=$request_data['Prix'];
       $Quantite_En_Stock=$request_data['Quantite_En_Stock'];
+      $Code_a_Bare=$request_data['Code_a_Bare'];
+      $Image=$request_data['Image'];
+
 
 
       $db = new DbOperations;
-      $result = $db->CreateMedicament($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock);
+      $result = $db->CreateMedicament($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock,$Code_a_Bare, $Image);
       if($result== MEDICAMENT_CREATED){
           $message = array();
           $message['error'] = false ;
