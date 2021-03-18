@@ -14,9 +14,10 @@
      $this->con=$db->connect();
 
    }
-   public function CreateMedicament($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock,$Code_a_Bare,$Image){
+   public function CreateMedicament($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock,$Code_a_Bare){
 
        if(!$this->IsNomCommercialExist($Nom_Commercial)) {
+         /*
          $target_dir = "uploads/";
          $target_file = $target_dir . basename($_FILES["$Image"]["name"]);
          $uploadOk = 1;
@@ -30,8 +31,8 @@
 
               $Image=basename( $_FILES["$Image"]["name"],".jpg"); // used to store the filename in a variable
 
-            $stmt= $this->con->prepare("INSERT INTO medicaments (Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock,Code_a_Bare,Image)
-            VALUES ('$Classe_Therapeutique','$Nom_Commercial', '$Laboratoire', '$Denominateur_De_Medicament', '$Forme_Pharmaceutique', '$Duree_De_Conservation', '$Remborsable', '$Lot', '$Date_De_Fabrication', '$Date_Peremption', '$Description_De_Composant', '$Prix', '$Quantite_En_Stock','$Code_a_Bare','$Image')");
+            */$stmt= $this->con->prepare("INSERT INTO medicaments (Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock,Code_a_Bare)
+            VALUES ('$Classe_Therapeutique','$Nom_Commercial', '$Laboratoire', '$Denominateur_De_Medicament', '$Forme_Pharmaceutique', '$Duree_De_Conservation', '$Remborsable', '$Lot', '$Date_De_Fabrication', '$Date_Peremption', '$Description_De_Composant', '$Prix', '$Quantite_En_Stock','$Code_a_Bare')");
 
               if($stmt->execute()){
                     return MEDICAMENT_CREATED;
@@ -45,7 +46,7 @@
 
     public function getMedicamentByNomCommercial($Nom_Commercial){
 
-      $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock , Code_a_Bare , Image FROM medicaments WHERE Nom_Commercial = ?");
+      $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock , Code_a_Bare FROM medicaments WHERE Nom_Commercial = ?");
       $stmt->bind_param('s', $Nom_Commercial);
       $stmt->execute();
       if(!$this->IsNomCommercialExist($Nom_Commercial)){
@@ -67,7 +68,7 @@
               $medicament['Prix']=$Prix;
               $medicament['Quantite_En_Stock']=$Quantite_En_Stock;
               $medicament['Code_a_Bare']=$Code_a_Bare;
-              $medicament['Image']=$Image;
+              //$medicament['Image']=$Image;
 
               array_push($medicaments, $medicament);
               return $medicaments;
@@ -80,9 +81,9 @@
     }
     public function getAllMedicaments(){
 
-      $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock , Code_a_Bare ,Image FROM medicaments ORDER BY Nom_Commercial DESC;");
+      $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock , Code_a_Bare FROM medicaments ORDER BY Nom_Commercial DESC;");
       $stmt->execute();
-            $stmt->bind_result($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock, $Code_a_Bare, $Image);
+            $stmt->bind_result($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock, $Code_a_Bare );
             $medicaments=array();
             while ($stmt->fetch()) {
               $medicament=array();
@@ -100,7 +101,7 @@
               $medicament['Prix']=$Prix;
               $medicament['Quantite_En_Stock']=$Quantite_En_Stock;
               $medicament['Code_a_Bare']=$Code_a_Bare;
-              $medicament['Image']=$Image;
+              //$medicament['Image']=$Image;
               array_push($medicaments, $medicament);
 
       }
@@ -109,9 +110,9 @@
     }
     public function getAllLaboratoire(){
 
-      $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock , Code_a_Bare ,Image FROM medicaments GROUP BY Laboratoire ORDER BY Nom_Commercial DESC;");
+      $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock , Code_a_Bare  FROM medicaments GROUP BY Laboratoire ORDER BY Nom_Commercial DESC;");
       $stmt->execute();
-            $stmt->bind_result($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock,$Code_a_Bare, $Image);
+            $stmt->bind_result($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock,$Code_a_Bare );
             $medicaments=array();
             while ($stmt->fetch()) {
               $medicament=array();
@@ -129,7 +130,7 @@
               $medicament['Prix']=$Prix;
               $medicament['Quantite_En_Stock']=$Quantite_En_Stock;
               $medicament['Code_a_Bare']=$Code_a_Bare;
-              $medicament['Image']=$Image;
+              //$medicament['Image']=$Image;
               array_push($medicaments, $medicament);
 
       }
@@ -150,7 +151,7 @@
     }
     public function Search($a){
 
-            $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock, Code_a_Bare, Image FROM medicaments WHERE
+            $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock, Code_a_Bare FROM medicaments WHERE
              Nom_Commercial LIKE '%$a%'
             OR Classe_TherapeutiqueLIKE '%$a%'
             OR Laboratoire LIKE '%$a%'
@@ -161,7 +162,7 @@
              if($stmt){
 
                $stmt->execute();
-               $stmt->bind_result($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock, $Code_a_Bare, $Image);
+               $stmt->bind_result($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock, $Code_a_Bare );
                      $medicaments=array();
                      while ($stmt->fetch()) {
                        $medicament=array();
@@ -179,7 +180,7 @@
                        $medicament['Prix']=$Prix;
                        $medicament['Quantite_En_Stock']=$Quantite_En_Stock;
                        $medicament['Code_a_Bare']=$Code_a_Bare;
-                       $medicament['Image']=$Image;
+                       //$medicament['Image']=$Image;
                        array_push($medicaments, $medicament);
 
                        return $medicaments;
