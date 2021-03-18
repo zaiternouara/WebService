@@ -12,7 +12,7 @@ $app = new Slim\App($config);
 
 
 $app->post('/createmedicament', function(Request $request , Response $response){
-  if(!HaveEmptyParameters(array('Classe_Therapeutique', 'Nom_Commercial', 'Laboratoire', 'Denominateur_De_Medicament', 'Forme_Pharmaceutique', 'Duree_De_Conservation', 'Remborsable', 'Lot', 'Date_De_Fabrication', 'Date_Peremption', 'Description_De_Composant', 'Prix', 'Quantite_En_Stock', 'Code_a_Bare' ),$request, $response)){
+  if(!HaveEmptyParameters(array('Classe_Therapeutique', 'Nom_Commercial', 'Laboratoire', 'Denominateur_De_Medicament', 'Forme_Pharmaceutique', 'Duree_De_Conservation', 'Remborsable', 'Lot', 'Date_De_Fabrication', 'Date_Peremption', 'Description_De_Composant', 'Prix', 'Quantite_En_Stock', 'Code_a_Bare'),$request, $response)){
 
       $request_data = $request->getParsedBody();
 
@@ -30,12 +30,12 @@ $app->post('/createmedicament', function(Request $request , Response $response){
       $Prix=$request_data['Prix'];
       $Quantite_En_Stock=$request_data['Quantite_En_Stock'];
       $Code_a_Bare=$request_data['Code_a_Bare'];
-      //$Image=$request_data['Image'];
+
 
 
 
       $db = new DbOperations;
-      $result = $db->CreateMedicament($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock,$Code_a_Bare );
+      $result = $db->CreateMedicament($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock,$Code_a_Bare);
       if($result== MEDICAMENT_CREATED){
           $message = array();
           $message['error'] = false ;
@@ -73,8 +73,7 @@ $app->post('/GetOneMedicament', function(Request $request , Response $response){
 
             $db = new DbOperations;
             $medicament=$db->getMedicamentByNomCommercial($Nom_Commercial);
-            Var_dump ($Nom_Commercial);
-            Var_dump ($medicament);
+
             if($medicament==null){
 
                         $response_data = array();
@@ -136,8 +135,8 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
 
 
  $app->post('/Search', function(Request $request , Response $response){
-                  echo "yh";
-                  Var_dump(HaveEmptyParameters(array('a'),$request, $response));
+                  //echo "yh";
+                  //Var_dump(HaveEmptyParameters(array('a'),$request, $response));
                   if(!HaveEmptyParameters(array('a'),$request, $response)){
 
                       $request_data = $request->getParsedBody();
@@ -145,7 +144,7 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
 
                       $db = new DbOperations;
                       $medicament=$db->Search($a);
-                      Var_dump($medicament);
+                      //Var_dump($medicament);
 
                       if($medicament== null){
 
@@ -157,12 +156,12 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
                                               ->withHeader('Content-type' , 'application/json')
                                               ->withStatus(404);//ONot found
                         } else{
-                          echo "tvgh";
+                          //echo "tvgh";
                           $response_data = array();
                           $response_data['error'] = false ;
                           $response_data['message'] = '  MEDICAMENT(s) ';
                           $response_data['user'] = $medicament;
-                          Var_dump($medicament);
+                          //Var_dump($medicament);
 
                           $response->write(json_encode($response_data));
                           return $response
@@ -175,6 +174,7 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
 
 $app-> put('/UpdateQuantiteStock/{Nom_Commercial}', function(Request $request , Response $response ,  array $args ){
                     $id = $args['Nom_Commercial'] ;
+
                     if(!HaveEmptyParameters(array('Nom_Commercial','Quantite_En_Stock'),$request,$response)){
 
                        $request_data = $request->getParsedBody();
@@ -219,7 +219,7 @@ function HaveEmptyParameters($required_params,$request, $response){
     $error_params='';
     $error_detail=array();
     $request_params=$request->getParsedBody();
-    Var_dump($request_params);
+    //Var_dump($request_params);
     foreach ($required_params as $param) {
     if(!isset($request_params[$param]) ||  strlen($request_params[$param])<=0 ){
             $error=true;
@@ -230,6 +230,7 @@ function HaveEmptyParameters($required_params,$request, $response){
       $error_detail=array();
       $error_detail['error'] = true;
       $error_detail['message']=' Required parameters ' . substr($error_params, 0, -2)  . ' are missing or empty';
+
       $response->write(json_encode($error_detail));
     }
 
