@@ -136,7 +136,8 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
 
  $app->post('/Search', function(Request $request , Response $response){
                   //echo "yh";
-                  //Var_dump(HaveEmptyParameters(array('a'),$request, $response));
+                 //Var_dump(HaveEmptyParameters(array('a'),$request, $response));
+
                   if(!HaveEmptyParameters(array('a'),$request, $response)){
 
                       $request_data = $request->getParsedBody();
@@ -150,17 +151,16 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
 
                                   $response_data = array();
                                   $response_data['error'] = true ;
-                                  $response_data['message'] = ' MEDICAMENT not found';
+                                  $response_data['medicament'] = $medicament;
                                   $response->write(json_encode($response_data));
                                   return $response
                                               ->withHeader('Content-type' , 'application/json')
-                                              ->withStatus(404);//ONot found
+                                              ->withStatus(200);//ok 
                         } else{
                           //echo "tvgh";
                           $response_data = array();
                           $response_data['error'] = false ;
-                          $response_data['message'] = '  MEDICAMENT(s) ';
-                          $response_data['user'] = $medicament;
+                           $response_data['medicament'] = $medicament;
                           //Var_dump($medicament);
 
                           $response->write(json_encode($response_data));
@@ -218,18 +218,21 @@ function HaveEmptyParameters($required_params,$request, $response){
     $error=false;
     $error_params='';
     $error_detail=array();
+    $medicament=array();
     $request_params=$request->getParsedBody();
     //Var_dump($request_params);
     foreach ($required_params as $param) {
     if(!isset($request_params[$param]) ||  strlen($request_params[$param])<=0 ){
             $error=true;
             $error_params.=$param . ', ';
+            $error_detail['error'] = $param;
           }
+
     }
     if($error){
       $error_detail=array();
       $error_detail['error'] = true;
-      $error_detail['message']=' Required parameters ' . substr($error_params, 0, -2)  . ' are missing or empty';
+      $error_detail['medicament']=$medicament;
 
       $response->write(json_encode($error_detail));
     }

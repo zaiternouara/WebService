@@ -138,18 +138,22 @@
 
     }
     public function Search($a){
-
-            $stmt = $this->con->prepare("SELECT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock, Code_a_Bare FROM medicaments WHERE
-             Nom_Commercial LIKE '%$a%'
-            OR Classe_TherapeutiqueLIKE '%$a%'
-            OR Laboratoire LIKE '%$a%'
-            OR Denominateur_De_Medicament LIKE '%$a%'
+              Var_dump($a);
+            $stmt = $this->con->prepare("SELECT DISTINCT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock, Code_a_Bare FROM medicaments
+              WHERE Nom_Commercial LIKE  \"%$a%\"
+            OR Classe_Therapeutique LIKE  \"%$a%\"
+            OR Laboratoire LIKE  \"%$a%\"
+            OR Denominateur_De_Medicament LIKE  \"%$a%\"
             ORDER BY Nom_Commercial DESC");
-            //Var_dump($stmt);
-            //$stmt->bind_param("s", $a);
-             if($stmt){
 
-               $stmt->execute();
+
+            //$stmt->bind_param("s", $a );
+            /*Nom_Commercial LIKE '%$a%'
+           OR Classe_Therapeutique LIKE '%$a%'
+           OR Laboratoire LIKE '%$a%'
+           OR Denominateur_De_Medicament LIKE '%$a%'*/
+            //$stmt->bind_param("Nom_Commercial", $a );
+          $stmt->execute();
                $stmt->bind_result($Classe_Therapeutique,$Nom_Commercial,$Laboratoire,$Denominateur_De_Medicament, $Forme_Pharmaceutique,$Duree_De_Conservation,$Remborsable, $Lot,$Date_De_Fabrication,$Date_Peremption,$Description_De_Composant,$Prix,$Quantite_En_Stock,$Code_a_Bare);
                      $medicaments=array();
                      while ($stmt->fetch()) {
@@ -176,7 +180,7 @@
 
 
 
-             }
+
 
     }
 
