@@ -138,7 +138,6 @@
 
     }
     public function Search($a){
-              Var_dump($a);
             $stmt = $this->con->prepare("SELECT DISTINCT Classe_Therapeutique, Nom_Commercial, Laboratoire, Denominateur_De_Medicament, Forme_Pharmaceutique, Duree_De_Conservation, Remborsable, Lot, Date_De_Fabrication, Date_Peremption, Description_De_Composant, Prix, Quantite_En_Stock, Code_a_Bare FROM medicaments
               WHERE Nom_Commercial LIKE  \"%$a%\"
             OR Classe_Therapeutique LIKE  \"%$a%\"
@@ -212,7 +211,7 @@
 
           }
           return false;
-                }
+       }
             return false;
         }
 

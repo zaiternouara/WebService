@@ -135,8 +135,7 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
 
 
  $app->post('/Search', function(Request $request , Response $response){
-                  //echo "yh";
-                 //Var_dump(HaveEmptyParameters(array('a'),$request, $response));
+
 
                   if(!HaveEmptyParameters(array('a'),$request, $response)){
 
@@ -145,7 +144,6 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
 
                       $db = new DbOperations;
                       $medicament=$db->Search($a);
-                      //Var_dump($medicament);
 
                       if($medicament== null){
 
@@ -155,13 +153,12 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
                                   $response->write(json_encode($response_data));
                                   return $response
                                               ->withHeader('Content-type' , 'application/json')
-                                              ->withStatus(200);//ok 
+                                              ->withStatus(200);//ok
                         } else{
                           //echo "tvgh";
                           $response_data = array();
                           $response_data['error'] = false ;
                            $response_data['medicament'] = $medicament;
-                          //Var_dump($medicament);
 
                           $response->write(json_encode($response_data));
                           return $response
@@ -220,7 +217,6 @@ function HaveEmptyParameters($required_params,$request, $response){
     $error_detail=array();
     $medicament=array();
     $request_params=$request->getParsedBody();
-    //Var_dump($request_params);
     foreach ($required_params as $param) {
     if(!isset($request_params[$param]) ||  strlen($request_params[$param])<=0 ){
             $error=true;
@@ -261,28 +257,22 @@ function HaveEmptyParameters($required_params,$request, $response){
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });*/
-$app->delete('/deletMedicament/{Nom_Commercial}', function(Request $request, Response $response, array $args){
-    $id = $args['Nom_Commercial'];
+$app->delete('/deletMedicament', function(Request $request, Response $response){
 
+
+  $request_data = $request->getParsedBody();
+  $a=$request_data['Nom_Commercial'];
+    $response_data = array();
     $db = new DbOperations;
 
-    $response_data = array();
-
-
-    $id = $args['Nom_Commercial'] ;
-    if(!HaveEmptyParameters(array('Nom_Commercial'),$request,$response)){
-
-        $db = new DbOperations;
-        $response_data = array();
-        Var_dump($db->deleteMedicament($id));
-        if($db->deleteMedicament($id)){
+      if($db->deleteMedicament($a)){
             $response_data['error'] = false;
-            $response_data['message'] = 'User has been deleeted';
+            $response_data['message'] = 'Medicament deleted';
         }else{
             $response_data['error'] = true;
             $response_data['message'] = 'Plase try again later';
         }
-    }
+
     $response->write(json_encode($response_data));
 
         return $response
