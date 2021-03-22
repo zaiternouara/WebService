@@ -12,10 +12,11 @@ $app = new Slim\App($config);
 
 
 $app->post('/createmedicament', function(Request $request , Response $response){
+
   if(!HaveEmptyParameters(array('Classe_Therapeutique', 'Nom_Commercial', 'Laboratoire', 'Denominateur_De_Medicament', 'Forme_Pharmaceutique', 'Duree_De_Conservation', 'Remborsable', 'Lot', 'Date_De_Fabrication', 'Date_Peremption', 'Description_De_Composant', 'Prix', 'Quantite_En_Stock', 'Code_a_Bare'),$request, $response)){
 
-      $request_data = $request->getParsedBody();
 
+      $request_data = $request->getParsedBody();
       $Classe_Therapeutique=$request_data['Classe_Therapeutique'];
       $Nom_Commercial=$request_data['Nom_Commercial'];
       $Laboratoire=$request_data['Laboratoire'];
@@ -39,7 +40,7 @@ $app->post('/createmedicament', function(Request $request , Response $response){
       if($result== MEDICAMENT_CREATED){
           $message = array();
           $message['error'] = false ;
-          $message['message'] = '  MEDICAMENT craeted successfully ';
+          $message['message'] = ' medicament saved ';
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type' , 'application/json')
@@ -48,11 +49,11 @@ $app->post('/createmedicament', function(Request $request , Response $response){
 
           $message = array();
           $message['error'] = true ;
-          $message['message'] = '  Some error accured';
+          $message['message'] = 'Some error accured';
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type' , 'application/json')
-                      ->withStatus(422);
+                      ->withStatus(201);
       }else if($result== MEDICAMENT_EXISTS){
         $message = array();
         $message['error'] = true ;
@@ -60,7 +61,7 @@ $app->post('/createmedicament', function(Request $request , Response $response){
         $response->write(json_encode($message));
         return $response
                     ->withHeader('Content-type' , 'application/json')
-                    ->withStatus(422);
+                    ->withStatus(201);
       }
 
   }
@@ -114,7 +115,6 @@ $app->get('/GetAllMedicaments', function(Request $request , Response $response){
                         ->withStatus(200);//OK
 
           });
-
 $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
 
 
@@ -168,6 +168,23 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
                   }
           }
         });
+$app->get('/GetAllExpire', function(Request $request , Response $response){
+
+
+
+                              $db = new DbOperations;
+                              $medicament=$db->getAllExpire();
+                              $response_data = array();
+                              $response_data['error'] =false ;
+
+                              $response_data['medicament'] = $medicament;
+
+                              $response->write(json_encode($response_data));
+                              return $response
+                                          ->withHeader('Content-type' , 'application/json')
+                                          ->withStatus(200);//OK
+
+                            });
 
 $app-> put('/UpdateQuantiteStock/{Nom_Commercial}', function(Request $request , Response $response ,  array $args ){
                     $id = $args['Nom_Commercial'] ;
@@ -257,11 +274,11 @@ function HaveEmptyParameters($required_params,$request, $response){
     ->withHeader('Content-type', 'application/json')
     ->withStatus(200);
 });*/
-$app->delete('/deletMedicament', function(Request $request, Response $response){
+$app->post('/deletMedicament', function(Request $request, Response $response){
 
 
-  $request_data = $request->getParsedBody();
-  $a=$request_data['Nom_Commercial'];
+    $request_data = $request->getParsedBody();
+    $a=$request_data['Nom_Commercial'];
     $response_data = array();
     $db = new DbOperations;
 
