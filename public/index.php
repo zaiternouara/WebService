@@ -40,7 +40,7 @@ $app->post('/createmedicament', function(Request $request , Response $response){
       if($result== MEDICAMENT_CREATED){
           $message = array();
           $message['error'] = false ;
-          $message['message'] = ' medicament saved ';
+          $message['message'] = ' Medicament saved ';
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type' , 'application/json')
@@ -168,6 +168,41 @@ $app->get('/GetAllLaboratoire', function(Request $request , Response $response){
                   }
           }
         });
+
+$app->post('/SearchByCodeBare', function(Request $request , Response $response){
+
+
+                         if(!HaveEmptyParameters(array('a'),$request, $response)){
+
+                             $request_data = $request->getParsedBody();
+                             $a=$request_data['a'];
+
+                             $db = new DbOperations;
+                             $medicament=$db->SearchByCodeBare($a);
+
+                             if($medicament== null){
+
+                                         $response_data = array();
+                                         $response_data['error'] = true ;
+                                         $response_data['medicament'] = $medicament;
+                                         $response->write(json_encode($response_data));
+                                         return $response
+                                                     ->withHeader('Content-type' , 'application/json')
+                                                     ->withStatus(200);//ok
+                               } else{
+                                 //echo "tvgh";
+                                 $response_data = array();
+                                 $response_data['error'] = false ;
+                                  $response_data['medicament'] = $medicament;
+
+                                 $response->write(json_encode($response_data));
+                                 return $response
+                                             ->withHeader('Content-type' , 'application/json')
+                                             ->withStatus(200);//OK
+
+                         }
+                 }
+               });
 $app->get('/GetAllExpire', function(Request $request , Response $response){
 
 
