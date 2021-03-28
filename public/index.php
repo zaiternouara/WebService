@@ -1,4 +1,5 @@
 <?php
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
@@ -40,7 +41,7 @@ $app->post('/createmedicament', function(Request $request , Response $response){
       if($result== MEDICAMENT_CREATED){
           $message = array();
           $message['error'] = false ;
-          $message['message'] = ' Medicament saved ';
+          $message['message'] = 'Medicament enregistre';
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type' , 'application/json')
@@ -49,7 +50,7 @@ $app->post('/createmedicament', function(Request $request , Response $response){
 
           $message = array();
           $message['error'] = true ;
-          $message['message'] = 'Some error accured';
+          $message['message'] = 'Une erreur s est produite ';
           $response->write(json_encode($message));
           return $response
                       ->withHeader('Content-type' , 'application/json')
@@ -57,7 +58,7 @@ $app->post('/createmedicament', function(Request $request , Response $response){
       }else if($result== MEDICAMENT_EXISTS){
         $message = array();
         $message['error'] = true ;
-        $message['message'] = '  Medicament already exists';
+        $message['message'] = 'Le medicament existe déjà';
         $response->write(json_encode($message));
         return $response
                     ->withHeader('Content-type' , 'application/json')
@@ -79,7 +80,7 @@ $app->post('/GetOneMedicament', function(Request $request , Response $response){
 
                         $response_data = array();
                         $response_data['error'] = true ;
-                        $response_data['message'] = ' MEDICAMENT not found';
+                        $response_data['message'] = ' Medicament introuvable ';
                         $response->write(json_encode($response_data));
                         return $response
                                     ->withHeader('Content-type' , 'application/json')
@@ -88,7 +89,7 @@ $app->post('/GetOneMedicament', function(Request $request , Response $response){
 
                   $response_data = array();
                   $response_data['error'] = false ;
-                  $response_data['message'] = '  One MEDICAMENT ';
+                  $response_data['message'] = 'Un medicament';
                   $response_data['user'] = $medicament;
 
                   $response->write(json_encode($response_data));
@@ -246,7 +247,7 @@ $app-> put('/UpdateQuantiteStock/{Nom_Commercial}', function(Request $request , 
                         } else {
                           $response_data = array();
                           $response_data['error'] =true ;
-                          $response_data['message'] = ' Please ty again later ';
+                          $response_data['message'] = ' Veuillez reessayer plus tard ';
 
                           $medicament=$db->getMedicamentByNomCommercial($Nom_Commercial);
                           $response_data['medicament'] =$medicament ;
@@ -319,10 +320,10 @@ $app->post('/deletMedicament', function(Request $request, Response $response){
 
       if($db->deleteMedicament($a)){
             $response_data['error'] = false;
-            $response_data['message'] = 'Medicament deleted';
+            $response_data['message'] = 'Medicament supprime';
         }else{
             $response_data['error'] = true;
-            $response_data['message'] = 'Plase try again later';
+            $response_data['message'] = 'Veuillez reessayer plus tard';
         }
 
     $response->write(json_encode($response_data));
